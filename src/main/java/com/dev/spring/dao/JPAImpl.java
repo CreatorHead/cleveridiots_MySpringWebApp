@@ -1,8 +1,11 @@
 package com.dev.spring.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +22,6 @@ public class JPAImpl implements UserDAO {
 			EntityManager em = emf.createEntityManager();
 			em.getTransaction().begin();
 			em.persist(user);
-			em.merge(user);
 			em.getTransaction().commit();
 			em.close();
 			state = true;
@@ -65,5 +67,24 @@ public class JPAImpl implements UserDAO {
 			e.printStackTrace();
 		}
 		return state;
+	}
+
+	@Override
+	public User login(Integer userId, String password) {
+		User user = null;
+		try{
+			EntityManager em = emf.createEntityManager();
+			em.getTransaction().begin();
+			TypedQuery<User> query = em.createQuery("from User u where userId= :id and password= :passwd", User.class);
+			query.setParameter("id", userId);
+			query.setParameter("passwd", password);
+			List<User> users = query.getResultList();
+			user = users.get(0);
+			em.getTransaction().commit();
+			em.close();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return user;
 	}
 }

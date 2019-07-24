@@ -28,4 +28,9 @@ public class UserServicesImpl implements UserServices {
 	public Boolean updatePassword(Integer userId, String passwd) {
 		return db.updatePassword(userId, passwd);
 	}
+
+	@Override
+	public User login(Integer userId, String password) {
+		return db.login(userId,password);
+	}
 }

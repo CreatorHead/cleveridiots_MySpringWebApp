@@ -28,4 +28,35 @@ public class UserController {
 		mv.setViewName("user");
 		return mv;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value="/add", method=RequestMethod.GET)
+	public String addUserPage(){
+		return "addUser";
+	}
+	
+	@RequestMapping(value="/add", method=RequestMethod.POST)
+	public ModelAndView addUser(HttpServletRequest req,
+			ModelAndView mv) {
+		User user = new User();
+		user.setFirstName(req.getParameter("firstName"));
+		user.setLastName(req.getParameter("lastName"));
+		user.setPassword(req.getParameter("password"));
+
+		boolean state = services.createProfile(user);
+		String msg = "Profile Creation Failed";
+		if(state){
+			msg = "Profile Creation Successful";
+		}
+		mv.addObject("msg", msg);
+		mv.setViewName("msg");
+		return mv;
+	}
+	
 }
